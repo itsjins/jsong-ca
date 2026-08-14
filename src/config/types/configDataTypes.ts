@@ -89,32 +89,6 @@ export interface PortfolioDataProps {
 }
 
 // --------------------------------------------------------
-// homepage redesign data. See src/config/homeData.json.ts.
-export interface HomeDataProps {
-  identity: {
-    brandMark: string;
-    brandLabel: string;
-    name: string;
-    role: string;
-    focus: string;
-    profileFocus: string;
-    location: string;
-    intro: string;
-    resumeHref: string;
-  };
-  status: string;
-  featuredProjects: readonly {
-    title: string;
-    stack: string;
-  }[];
-  experience: readonly {
-    organization: string;
-    role: string;
-    period: string;
-  }[];
-}
-
-// --------------------------------------------------------
 // site settings
 export interface SiteSettingsProps {
   useViewTransitions?: boolean;

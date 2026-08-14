@@ -3,8 +3,7 @@
 // the desktop <Nav> and the mobile Sheet <Nav> (a sibling sub-part of Header.astro) so the two can't
 // drift. Each item is a retro NavLink with the leading ► pointer that fades in on hover/active.
 // `fullWidth` stretches each item to the drawer's width for the mobile variant. Content is wired from
-// config (navData) with the shared active-route check. Desktop labels are deliberately compact so
-// five destinations fit without making the header dominant; drawer labels remain comfortably sized.
+// config (navData) with the shared active-route check.
 import { NavItem, NavLink } from "@components/ui/nav";
 import { navItems } from "@config/navData.json";
 import { isActive } from "@js/nav";
@@ -24,9 +23,8 @@ const { pathname, fullWidth = false } = Astro.props as Props;
       <NavLink
         variant="retro"
         href={item.href}
-        class={fullWidth ? "w-full text-sm" : "text-[10px] xl:text-xs"}
+        class={fullWidth ? "w-full" : undefined}
         aria-current={isActive(pathname, item.href) ? "page" : undefined}
-        data-dialog-close={fullWidth ? "" : undefined}
       >
         <svg
           class="fill-success pointer-events-none absolute top-1/2 left-1.5 h-3.5 w-2.5 -translate-y-1/2 opacity-0 transition-opacity duration-100 group-hover:opacity-100 group-aria-[current=page]:opacity-100"

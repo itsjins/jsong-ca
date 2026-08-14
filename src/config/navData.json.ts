@@ -1,15 +1,19 @@
 import { type NavItemProps } from "./types/configDataTypes";
 
 /**
- * * Primary navigation for jsong.ca.
+ * * Primary navigation — the header's link set (Figma node 5:110).
  *
- * Notes keeps the existing `/blog/` route while presenting the new public label. Experience points
- * to the homepage preview until its dedicated route is introduced in a later phase.
+ * Labels are Title-case and uppercased in the UI (Press Start 2P). Hrefs carry the trailing slash
+ * to match `astro.config.mjs` `trailingSlash: "always"`. `as const satisfies` keeps the literal
+ * types while checking the shape.
+ *
+ * Order: ABOUT · PROJECTS · BLOG · CONTACT. Home is intentionally not a nav item — the brand wordmark
+ * (Header.astro `<a href="/">`) is the home link, the common logo-as-home pattern. All four routes are
+ * live (`/contact/` is the one SSR page). Four Press Start labels fit the desktop bar at `lg` (measured).
  */
 export const navItems = [
-  { label: "Home", href: "/" },
-  { label: "Projects", href: "/projects/" },
-  { label: "Experience", href: "/#experience" },
-  { label: "Notes", href: "/blog/" },
   { label: "About", href: "/about/" },
+  { label: "Projects", href: "/projects/" },
+  { label: "Blog", href: "/blog/" },
+  { label: "Contact", href: "/contact/" },
 ] as const satisfies readonly NavItemProps[];
