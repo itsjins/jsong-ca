@@ -1,5 +1,5 @@
 import Icon, { icon } from "./Icon.astro";
-import { type IconName, iconNames } from "./icons";
+import { type IconName, iconNames } from "./registry";
 
 export { Icon, icon, iconNames };
 export type { IconName };

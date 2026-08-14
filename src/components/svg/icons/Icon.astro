@@ -1,12 +1,12 @@
 ---
 // src/components/svg/icons/Icon.astro — astro-boiler primitive (see ../../ui/README.md).
-// Renders one icon from the generated ICONS registry. Geometry uses currentColor, so
+// Renders one icon from the combined generated + project-owned registry. Geometry uses currentColor, so
 // recolor with text-* utilities and resize with size-* (or the `size` variant). Decorative
 // by default (aria-hidden); pass `title` to give it an accessible name (role="img").
 import type { HTMLAttributes } from "astro/types";
 import { tv, type VariantProps } from "tailwind-variants";
 
-import { type IconName, ICONS } from "./icons";
+import { type IconName, ICONS } from "./registry";
 
 type Props = Omit<HTMLAttributes<"svg">, "name"> &
   VariantProps<typeof icon> & { name: IconName; title?: string };
