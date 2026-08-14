@@ -1,15 +1,43 @@
 ---
-// src/components/Sections/Home/LatestPosts.astro — Figma "Latest Posts Section" (node 5:31).
-//
-// Data-only section: the shared heading + 1/2/3-col card grid lives in <CardGrid>. This reads the
-// three most-recent posts from the `blog` collection (newest first) so the home grid and the /blog/
-// listing share ONE source and every link resolves — replacing the hardcoded placeholder list that
-// stood in until the blog route landed (the same rewire the Featured Projects section got).
-import CardGrid from "@components/Sections/Global/CardGrid.astro";
+// Two newest published entries from the existing blog collection, presented publicly as Notes.
+// Draft filtering, ordering, destinations, and card mapping remain shared with the full listing.
+import ContentCard from "@components/Cards/ContentCard.astro";
+import SectionHeading from "@components/Sections/Global/SectionHeading.astro";
+import { PixelIcon } from "@components/svg/pixel-icons";
+import { Reveal } from "@components/ui/reveal";
 import { getSortedPosts } from "@js/blogData";
 import { toPostCard } from "@js/postCards";
 
-const posts = (await getSortedPosts()).slice(0, 3).map(toPostCard);
+const notes = (await getSortedPosts()).slice(0, 2).map(toPostCard);
 ---
 
-<CardGrid headingId="latest-posts-heading" title="Latest Posts" items={posts} />
+<Reveal
+  as="section"
+  id="notes"
+  aria-labelledby="recent-notes-heading"
+  class="flex scroll-mt-24 flex-col gap-6"
+>
+  <SectionHeading id="recent-notes-heading" title="Recent Notes" />
+
+  {
+    notes.length > 0 ? (
+      <ul class="grid gap-5 sm:grid-cols-2">
+        {notes.map((note) => (
+          <li>
+            <ContentCard {...note} />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-muted-foreground text-base">No notes published yet.</p>
+    )
+  }
+
+  <a
+    href="/blog/"
+    class="primary-focus text-info hover:text-success inline-flex w-fit items-center gap-2 text-sm font-semibold transition-colors"
+  >
+    View all Notes
+    <PixelIcon name="arrow-right" class="size-4" />
+  </a>
+</Reveal>
