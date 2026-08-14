@@ -1,7 +1,100 @@
-# AGENTS.md — Astro template
+# AGENTS.md — jsong.ca portfolio
 
-Astro 7 + Tailwind CSS v4 + TypeScript (strict) starter with typed, config-driven content and a
-CSS-first token architecture. Single-language. Package manager: **pnpm**.
+Astro 7 + Tailwind CSS v4 + TypeScript (strict) personal portfolio with typed, config-driven content
+and a CSS-first token architecture. The project began as the 8-BitQuest template and is being
+incrementally redesigned as **jsong.ca**. Single-language. Package manager: **pnpm**.
+
+## Product purpose
+
+- This is Jin Song's professional software-engineering portfolio, primarily intended for job
+  searching, recruiter review, hiring-manager review, and technical peer review.
+- Preserve the memorable retro pixel identity of 8-BitQuest, but prioritize professionalism,
+  readability, credibility, accessibility, and clear information hierarchy.
+- The design concept is **Paper Pixel**: a restrained retro-computing interface printed on warm
+  paper rather than a dark neon game dashboard.
+- The target primary navigation is: **Home · Projects · Experience · Notes · About**.
+- The target homepage structure is:
+  1. Hero — name, role, focus, location, introduction, Projects CTA, Resume CTA
+  2. Player Profile / System Info — role, focus, location, status
+  3. Project Log
+  4. Professional Experience
+  5. Recent Notes
+  6. Footer — GitHub, LinkedIn, email
+- The repository may temporarily differ from this target while the redesign is being implemented.
+  Make changes incrementally; do not treat transitional routes or demo copy as the final design.
+
+## Paper Pixel design direction
+
+- Primary surfaces: warm cream, off-white, pale beige, and related paper tones.
+- Primary ink and borders: dark forest green, olive, and charcoal-green.
+- Accent colors are limited and muted: dusty blue, sage green, and muted brick red.
+- A subtle paper texture is welcome, but it must not reduce text contrast, introduce distracting
+  noise, or require a heavy runtime dependency.
+- Preserve pixel styling selectively in headings, icons, badges, status UI, dividers, panels,
+  borders, and small decorative details.
+- Body text and long-form prose prioritize reading comfort and do not need a pixel or monospaced
+  font. Reserve the pixel display face for short text at deliberate hierarchy points.
+- Avoid pervasive uppercase text, oversized hard shadows, excessive four-pixel borders, neon
+  accents, cyberpunk styling, and indie-game-studio language.
+- Retro terminology may be used sparingly—such as "Project Log" or "System Info"—but professional
+  meaning must remain immediately clear.
+- Prefer calm hierarchy and whitespace over decorative density. The site should be suitable for
+  inclusion on a software-engineering résumé.
+- Keep both light and dark themes coherent while both are supported. Do not remove dark-mode
+  behavior or change the theme bootstrap policy without an explicit design decision.
+
+## Content integrity
+
+- Never invent personal information, employers, job titles, dates, education, certifications,
+  project outcomes, technologies, metrics, testimonials, social URLs, email addresses, or résumé
+  URLs.
+- When real content has not been provided, use clearly identifiable placeholder content that cannot
+  be mistaken for a verified claim about Jin.
+- Do not silently present the template's demo content as Jin's work or experience.
+- Keep facts in one authoritative source:
+  - Projects and technical notes belong in Astro content collections.
+  - Identity, navigation, social links, and facts shared across pages belong in typed config.
+  - Experience shown on both Home and Experience must come from one typed config or collection,
+    rather than duplicated component literals.
+  - Truly one-off presentational copy may remain as a typed literal in its Section component.
+- Use **Notes** in public-facing navigation and copy. If the existing `blog` collection or `/blog/`
+  routes are retained internally during migration, keep that distinction deliberate and consistent.
+
+## Redesign implementation principles
+
+- Preserve the existing Astro architecture where practical. Prefer adapting route shells, Sections,
+  Cards, UI primitives, config, and collections over replacing them.
+- Make design changes token-first: update semantic variables, palette ramps, typography tokens,
+  shadows, and reusable primitives before adding repeated component-level overrides.
+- Reuse `PixelPanel`, shared card shells, badges, the icon registries, navigation primitives,
+  responsive grids, SEO helpers, and content-query helpers where their contracts still fit.
+- Modify component APIs carefully and update all consumers together. Read the relevant component
+  contract README before changing a Section, Card, or UI primitive.
+- Make small, reviewable phases. Avoid whole-site rewrites or mixing content replacement, route
+  migration, and a complete visual redesign into one change.
+- Do not remove useful behavior—SEO, RSS, structured data, view transitions, theme handling,
+  accessibility, responsive behavior, contact handling, or reduced-motion support—without a clear
+  reason.
+- Default to zero-JavaScript Astro output. Add client behavior only when the interaction genuinely
+  requires it.
+- Do not add a styling, texture, icon, motion, or component dependency when the existing token,
+  CSS, or component systems can handle the requirement cleanly.
+
+## Responsive and accessibility requirements
+
+- Design mobile-first. Mobile should be a clean single-column layout with readable body text,
+  comfortable line lengths, generous touch targets, and vertically stacked cards and actions.
+- Desktop may use a denser retro dashboard composition, but content order and reading flow must
+  remain clear without relying on visual position alone.
+- Preserve semantic headings, landmarks, lists, definition lists, link purpose, and logical keyboard
+  order.
+- Maintain visible focus states and keyboard operation for all interactive controls.
+- Meet WCAG AA contrast for normal text and controls. Paper texture and muted colors do not override
+  this requirement.
+- Respect `prefers-reduced-motion`. Decorative motion must remain optional and must not be required
+  to discover or understand content.
+- Prevent wide pixel headings, metadata rows, code blocks, tables, or status panels from causing
+  horizontal overflow on narrow screens.
 
 ## Commands
 
@@ -25,17 +118,25 @@ src/
 │   ├── Sections/<Page>/<Name>.astro  # layout-free page sections; Global/ for cross-page ones
 │   ├── Cards/<Name>Card.astro        # composed, content-aware cards (on ui/pixel-panel)
 │   ├── ui/<name>/<Name>.astro        # UI primitives (contract: ui/README.md)
-│   └── svg/icons/                    # the icon system
+│   └── svg/
+│       ├── icons/                    # general icon registry
+│       └── pixel-icons/              # pixel-art icon registry
 ├── config/
-│   ├── siteData.json.ts            # typed site metadata (name, title, author, OG default)
-│   ├── legalData.json.ts           # terms + privacy content
-│   ├── siteSettings.json.ts        # siteLang/siteLocale + feature flags
-│   └── types/configDataTypes.ts    # interfaces for the data files
-├── data/<collection>/<slug>/       # content collection entries
-├── js/                             # textUtils, schema (JSON-LD builders)
-├── layouts/                        # BaseHead (SEO/meta), BaseLayout (shell)
-├── pages/                          # thin route shells: own BaseLayout + SEO, compose Sections
-└── styles/                         # global.css (entry), tailwind-theme.css, fonts.css
+│   ├── siteData.json.ts             # site identity, author, OG default, sameAs URLs
+│   ├── navData.json.ts              # primary navigation
+│   ├── portfolioData.json.ts        # shared portfolio/profile facts
+│   ├── socialData.json.ts           # typed social-platform resolution
+│   ├── legalData.json.ts            # terms + privacy content
+│   ├── siteSettings.json.ts         # siteLang/siteLocale + feature flags
+│   └── types/configDataTypes.ts     # interfaces for config files
+├── data/
+│   ├── projects/<slug>/index.mdx    # project entries
+│   ├── blog/<slug>/index.mdx        # technical posts; target public name is Notes
+│   └── authors/<name>.md            # author records
+├── js/                              # content queries, card mappings, SEO/schema, RSS, utilities
+├── layouts/                         # BaseHead (SEO/meta), BaseLayout (global shell)
+├── pages/                           # thin route shells: own BaseLayout + SEO, compose Sections
+└── styles/                          # tokens, global entry, fonts, and owned motion catalog
 ```
 
 - **Sections vs Cards vs ui**: pages are thin route shells that own `BaseLayout` + SEO and compose

@@ -1,7 +1,7 @@
 ---
 // src/components/ui/pixel-panel/PixelPanel.astro — astro-boiler primitive (see ../README.md).
 //
-// The 8-BitQuest signature surface: `bg-card` + a 4px pure-black frame + the hard offset pixel
+// The Paper Pixel signature surface: `bg-card` + a 2px forest frame + a restrained hard pixel
 // shadow (`shadow-pixel`, or `shadow-pixel-lg` when `elevated`). The ONE canonical pixel card/panel —
 // the hero panels, the ContentCard shell, the About character/gear cards, and the project detail
 // cards all render through it, so the surface can't drift. Bare on purpose: the call site supplies
@@ -16,7 +16,7 @@ type Props = HTMLAttributes<"div"> &
   };
 
 export const pixelPanel = tv({
-  base: "bg-card text-card-foreground border-border border-4",
+  base: "bg-card text-card-foreground border-border border-2",
   variants: {
     // hero panels lift with the larger shadow; cards use the standard one.
     elevated: { true: "shadow-pixel-lg", false: "shadow-pixel" },

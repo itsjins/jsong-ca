@@ -1,11 +1,11 @@
 ---
-// src/components/Sections/Global/Footer.astro — the global site footer (8-BitQuest, Figma node 5:93).
+// src/components/Sections/Global/Footer.astro — the global Paper Pixel site footer.
 //
-// Cross-page chrome, rendered once in BaseLayout below <main>. Reproduces the dark Figma frame: a
-// full-bleed pixel bar (black top border, no shadow) with three groups — copyright (left), a
+// Cross-page chrome, rendered once in BaseLayout below <main>. A full-bleed paper bar with a forest
+// pixel seam holds three groups — copyright (left), a
 // social/utility icon row (centre), legal links (right). One desktop frame, so it stacks to a
 // centred column below `md` (measured: the three Press Start groups stop fitting comfortably under
-// ~768px). Tokens only, so the light theme (lavender ground / navy ink) flips for free.
+// ~768px). Semantic tokens keep both Paper Pixel color modes coherent.
 //
 // Reuses what's here — the pixel-icon registry (`svg/pixel-icons`) for the four social glyphs, and
 // `.site-container` / `.primary-focus` from global.css. No new primitives beyond that registry, no JS.
@@ -41,7 +41,7 @@ const legalLinks = [
 ] as const;
 ---
 
-<footer class="bg-background border-border border-t-4" data-slot="site-footer">
+<footer class="bg-background border-border border-t-2" data-slot="site-footer">
   <div
     class="site-container flex flex-col items-center gap-4 py-4 text-center md:flex-row md:justify-between md:gap-6 md:text-left"
   >
