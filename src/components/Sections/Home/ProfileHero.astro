@@ -1,0 +1,536 @@
+---
+// Combined home About + Contact introduction, composed as the Paper Pixel player-card layout.
+// Personal copy comes from typed portfolioData; the character art remains a replaceable asset.
+import { Icon, type IconName } from "@components/svg/icons";
+import { PixelPanel } from "@components/ui/pixel-panel";
+import portfolioData from "@config/portfolioData.json";
+import avatar from "@images/jsong-about-avatar.png";
+
+const { name, role, focus, location, intro, status, uptime, resumeHref } =
+  portfolioData.homeProfile;
+
+const profileRows: readonly {
+  label: string;
+  value: string;
+  icon: IconName;
+  tone: string;
+}[] = [
+  { label: "Role", value: role, icon: "profile-role", tone: "text-success-700" },
+  {
+    label: "Focus",
+    value: focus.replaceAll(" / ", " · "),
+    icon: "profile-focus",
+    tone: "text-info",
+  },
+  { label: "Location", value: location, icon: "profile-location", tone: "text-secondary-600" },
+  { label: "Status", value: status, icon: "profile-status", tone: "text-secondary-500" },
+  { label: "Uptime", value: uptime, icon: "profile-uptime", tone: "text-success-700" },
+];
+---
+
+<section aria-labelledby="profile-hero-heading" class="profile-hero">
+  <div class="identity-pane">
+    <h1 id="profile-hero-heading" class="identity-name">{name}</h1>
+
+    <div class="identity-grid">
+      <div class="identity-copy">
+        <p class="identity-role">{role}</p>
+        <p class="identity-focus">{focus}</p>
+
+        <p class="identity-location">
+          <Icon name="profile-location" size="sm" class="text-secondary-600 shrink-0" />
+          <span>Based in {location}</span>
+        </p>
+
+        <p class="identity-intro">{intro}</p>
+
+        <div class="identity-actions">
+          <a href="/projects/" class="pixel-btn pixel-btn--blue profile-action">
+            <Icon name="arrow-up-right" size="sm" />
+            View Projects
+          </a>
+          {
+            resumeHref ? (
+              <a href={resumeHref} class="pixel-btn profile-action">
+                <Icon name="file" size="sm" />
+                Resume
+              </a>
+            ) : (
+              <button
+                type="button"
+                disabled
+                title="Dummy resume link — replace in portfolioData"
+                class="pixel-btn profile-action cursor-not-allowed opacity-70"
+              >
+                <Icon name="file" size="sm" />
+                Resume
+              </button>
+            )
+          }
+        </div>
+      </div>
+
+      <div class="pixel-scene" aria-hidden="true">
+        <svg class="pixel-cloud pixel-cloud--one" viewBox="0 0 72 30">
+          <path d="M2 27h68M12 27v-5h8v-6h7v-7h8V5h8v4h8v7h7v6h8v5"></path>
+        </svg>
+        <svg class="pixel-cloud pixel-cloud--two" viewBox="0 0 72 30">
+          <path d="M2 27h68M12 27v-5h8v-6h7v-7h8V5h8v4h8v7h7v6h8v5"></path>
+        </svg>
+
+        <div class="pixel-city">
+          <span class="building building--one"></span>
+          <span class="building building--two"></span>
+          <span class="building building--three"></span>
+          <span class="building building--four"></span>
+          <span class="building building--five"></span>
+        </div>
+
+        <div class="pixel-flag">
+          <span class="flag-mark">JS</span>
+        </div>
+
+        <img
+          src={avatar.src}
+          width={avatar.width}
+          height={avatar.height}
+          alt=""
+          loading="eager"
+          decoding="async"
+          class="player-avatar"
+        />
+
+        <div class="pixel-platform"></div>
+      </div>
+    </div>
+  </div>
+
+  <PixelPanel as="aside" aria-labelledby="player-profile-heading" class="profile-panel">
+    <div class="profile-heading">
+      <span aria-hidden="true">&gt;_</span>
+      <h2 id="player-profile-heading">Player Profile</h2>
+    </div>
+
+    <dl class="profile-list">
+      {
+        profileRows.map((row) => (
+          <div class="profile-row">
+            <Icon name={row.icon} size="lg" class:list={["profile-icon", row.tone]} />
+            <dt>{row.label}</dt>
+            <dd>{row.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <div class="profile-statusbar">
+      <span>System Status</span>
+      <span class="status-hearts" aria-label="Online">
+        <Icon name="profile-status" size="sm" />
+        <Icon name="profile-status" size="sm" />
+        <Icon name="profile-status" size="sm" />
+      </span>
+      <span class="text-success-700">Online</span>
+    </div>
+  </PixelPanel>
+</section>
+
+<style>
+  .profile-hero {
+    display: grid;
+    width: 100%;
+    min-width: 0;
+    gap: 1.5rem;
+  }
+
+  .identity-pane {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .identity-name {
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-size: clamp(2.35rem, 7vw, 4.3rem);
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+
+  .identity-grid {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .identity-copy {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .identity-role,
+  .identity-focus,
+  .identity-location,
+  .identity-intro,
+  .profile-row dd {
+    font-family: var(--font-mono);
+  }
+
+  .identity-role {
+    color: var(--foreground);
+    font-size: clamp(1.45rem, 4vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .identity-focus {
+    color: var(--color-primary-700);
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    font-weight: 700;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .identity-location {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--foreground);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .identity-intro {
+    max-width: 35rem;
+    color: var(--muted-foreground);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .identity-actions {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.5rem 0.2rem 0.2rem;
+  }
+
+  .profile-action {
+    min-height: 3.25rem;
+    gap: 0.65rem;
+    padding: 0.85rem 1.25rem;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    text-align: center;
+    text-transform: none;
+  }
+
+  .pixel-scene {
+    position: relative;
+    min-height: 18rem;
+    overflow: hidden;
+  }
+
+  .player-avatar {
+    position: absolute;
+    z-index: 4;
+    right: 5rem;
+    bottom: 1.45rem;
+    width: min(54vw, 12rem);
+    height: auto;
+    image-rendering: pixelated;
+  }
+
+  .pixel-platform {
+    position: absolute;
+    z-index: 5;
+    right: 0;
+    bottom: 0;
+    width: min(92%, 19rem);
+    height: 1.75rem;
+    border: 2px solid var(--border);
+    background:
+      linear-gradient(
+        90deg,
+        transparent 0 12%,
+        var(--color-primary-300) 12% 20%,
+        transparent 20% 38%,
+        var(--color-success-400) 38% 50%,
+        transparent 50% 72%,
+        var(--color-primary-400) 72% 82%,
+        transparent 82%
+      ),
+      linear-gradient(
+        var(--color-success-500) 0 36%,
+        var(--color-primary-800) 36% 58%,
+        var(--color-base-700) 58% 100%
+      );
+    box-shadow: inset 0 -5px 0 var(--color-base-800);
+  }
+
+  .pixel-city {
+    position: absolute;
+    z-index: 1;
+    right: 0.5rem;
+    bottom: 1.7rem;
+    display: flex;
+    height: 5.5rem;
+    align-items: flex-end;
+    gap: 0.25rem;
+    color: var(--color-base-400);
+    opacity: 0.62;
+  }
+
+  .building {
+    display: block;
+    width: 1.1rem;
+    border: 2px solid currentColor;
+    background: color-mix(in srgb, currentColor 42%, transparent);
+    box-shadow:
+      inset 0.32rem 0 transparent,
+      inset 0.52rem 0 currentColor;
+  }
+
+  .building--one {
+    height: 2.8rem;
+  }
+  .building--two {
+    height: 4rem;
+  }
+  .building--three {
+    height: 5.3rem;
+  }
+  .building--four {
+    height: 3.5rem;
+  }
+  .building--five {
+    height: 4.5rem;
+  }
+
+  .pixel-flag {
+    position: absolute;
+    z-index: 3;
+    right: 4rem;
+    bottom: 1.7rem;
+    width: 0.32rem;
+    height: 11rem;
+    border: 1px solid var(--border);
+    background: var(--color-base-700);
+    box-shadow: 2px 0 0 var(--color-base-300);
+  }
+
+  .flag-mark {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.3rem;
+    display: grid;
+    width: 3.5rem;
+    height: 2.25rem;
+    place-items: center;
+    border: 2px solid var(--border);
+    background: var(--color-success-300);
+    color: var(--color-primary-950);
+    clip-path: polygon(0 0, 100% 12%, 88% 50%, 100% 88%, 0 100%);
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+  }
+
+  .pixel-cloud {
+    position: absolute;
+    z-index: 0;
+    width: 4.5rem;
+    fill: none;
+    stroke: var(--color-base-300);
+    stroke-width: 2;
+    opacity: 0.8;
+    shape-rendering: crispEdges;
+  }
+
+  .pixel-cloud--one {
+    top: 1.25rem;
+    right: 0.4rem;
+  }
+  .pixel-cloud--two {
+    top: 7rem;
+    left: 0;
+    width: 5.2rem;
+  }
+
+  .profile-panel {
+    align-self: stretch;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 0;
+    clip-path: polygon(
+      0.55rem 0,
+      calc(100% - 0.55rem) 0,
+      100% 0.55rem,
+      100% calc(100% - 0.55rem),
+      calc(100% - 0.55rem) 100%,
+      0.55rem 100%,
+      0 calc(100% - 0.55rem),
+      0 0.55rem
+    );
+  }
+
+  .profile-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    border-bottom: 2px solid var(--border);
+    padding: 1rem 1.1rem;
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .profile-list {
+    padding: 0 1.1rem;
+  }
+
+  .profile-row {
+    display: grid;
+    grid-template-columns: 1.75rem minmax(4.5rem, 0.75fr) minmax(0, 1.65fr);
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 4.1rem;
+    border-bottom: 1px dashed var(--color-base-400);
+  }
+
+  .profile-row:last-child {
+    border-bottom: 0;
+  }
+
+  .profile-row dt,
+  .profile-statusbar {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .profile-row dt {
+    color: var(--foreground);
+    font-size: 0.55rem;
+    line-height: 1.6;
+  }
+
+  .profile-row dd {
+    min-width: 0;
+    color: var(--foreground);
+    font-size: 0.82rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+
+  .profile-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .profile-statusbar {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    border-top: 2px solid var(--border);
+    padding: 0.8rem 1.1rem;
+    font-size: 0.52rem;
+    line-height: 1.5;
+  }
+
+  .status-hearts {
+    display: flex;
+    gap: 0.25rem;
+    color: var(--color-success-600);
+  }
+
+  @media (max-width: 559px) {
+    .profile-hero,
+    .identity-pane,
+    .identity-grid,
+    .identity-copy,
+    .pixel-scene,
+    .profile-panel {
+      max-width: calc(100vw - 2rem);
+    }
+
+    .identity-focus,
+    .identity-location,
+    .identity-intro {
+      max-width: 100%;
+      word-break: break-word;
+    }
+
+    .profile-row {
+      grid-template-columns: 1.75rem minmax(0, 1fr);
+      gap: 0.2rem 0.7rem;
+      padding: 0.8rem 0;
+    }
+
+    .profile-row dd {
+      grid-column: 2;
+    }
+  }
+
+  @media (min-width: 560px) {
+    .identity-actions {
+      width: auto;
+      flex-direction: row;
+    }
+
+    .identity-grid {
+      grid-template-columns: minmax(0, 1fr) 15rem;
+      align-items: end;
+    }
+
+    .pixel-scene {
+      min-height: 22rem;
+    }
+
+    .player-avatar {
+      right: 4.5rem;
+      width: 10rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .profile-hero {
+      grid-template-columns: minmax(0, 1.72fr) minmax(22rem, 0.92fr);
+      align-items: stretch;
+    }
+
+    .identity-name {
+      font-size: clamp(3.2rem, 5vw, 4rem);
+    }
+
+    .identity-grid {
+      grid-template-columns: minmax(0, 1fr) 14.5rem;
+      gap: 0.5rem;
+    }
+
+    .pixel-scene {
+      min-height: 19.5rem;
+    }
+
+    .player-avatar {
+      right: 4.5rem;
+      width: 10rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .identity-name {
+      font-size: 4.3rem;
+    }
+  }
+</style>

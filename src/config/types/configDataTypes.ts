@@ -84,6 +84,16 @@ export interface PortfolioDataProps {
     home: readonly string[];
     profile: readonly string[];
   };
+  homeProfile: {
+    name: string;
+    role: string;
+    focus: string;
+    location: string;
+    intro: string;
+    status: string;
+    uptime: string;
+    resumeHref: string;
+  };
   home: { tagline: string; heading: string; intro: string }; // home hero
   contact: { prompt: string }; // home Contact-section prompt
 }

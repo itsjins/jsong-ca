@@ -33,6 +33,19 @@ const portfolioData = {
     profile: ["Class: Full-Stack Dev", "Lvl: 8+", "XP: 8.5K", "Stars: 2.1K"],
   },
 
+  // Homepage Profile Hero placeholders. Replace these values and resumeHref before launch.
+  homeProfile: {
+    name: "Jin Song",
+    role: "Software Engineer",
+    focus: "Cloud Infrastructure / Platform / Automation",
+    location: "Kitchener-Waterloo, Canada",
+    intro:
+      "I build reliable cloud infrastructure, internal platforms, and developer tooling that help teams move faster and ship with confidence.",
+    status: "Building & Learning",
+    uptime: "99.9% (and improving)",
+    resumeHref: "",
+  },
+
   home: {
     tagline: "Player 1",
     heading: "Welcome, Player One",
