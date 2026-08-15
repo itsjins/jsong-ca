@@ -188,7 +188,7 @@
   }
 
   .site-container {
-    @apply mx-auto max-w-[1100px] px-4;
+    @apply mx-auto max-w-[1280px] px-4;
   }
 
   /* Paper Pixel button — retains the notched 8-bit silhouette and press interaction, with quieter
