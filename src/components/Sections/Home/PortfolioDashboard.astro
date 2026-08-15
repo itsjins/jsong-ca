@@ -1,0 +1,522 @@
+---
+// Compact homepage dashboard: three Paper Pixel panels backed by the canonical Projects/Blog
+// collections and shared Experience config. Zero client JS; desktop uses three columns and mobile
+// preserves the Project → Experience → Notes reading order.
+import { Icon } from "@components/svg/icons";
+import { PixelPanel } from "@components/ui/pixel-panel";
+import portfolioData from "@config/portfolioData.json";
+import { getSortedPosts } from "@js/blogData";
+import { getSortedProjects } from "@js/projectData";
+import d2lLogo from "@images/home-dashboard/d2l.png";
+
+const projectIds = ["home-infrastructure", "photo-backup-architecture", "jsong-ca"] as const;
+const noteIds = [
+  "docker-networking-for-self-hosted-services",
+  "designing-a-resilient-photo-backup-system",
+] as const;
+
+function defined<T>(value: T | undefined): value is T {
+  return value !== undefined;
+}
+
+const projectMap = new Map((await getSortedProjects()).map((entry) => [entry.id, entry]));
+const projects = projectIds.map((id) => projectMap.get(id)).filter(defined);
+
+const postMap = new Map((await getSortedPosts()).map((entry) => [entry.id, entry]));
+const notes = noteIds.map((id) => postMap.get(id)).filter(defined);
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+const experience = portfolioData.experience;
+---
+
+<section aria-labelledby="portfolio-dashboard-heading" class="dashboard-grid">
+  <h2 id="portfolio-dashboard-heading" class="sr-only">
+    Featured projects, professional experience, and recent notes
+  </h2>
+
+  <PixelPanel as="article" aria-labelledby="project-log-heading" class="dashboard-panel">
+    <header class="dashboard-heading">
+      <h3 id="project-log-heading"><span aria-hidden="true">&gt;_</span> Project Log</h3>
+      <a href="/projects/" class="dashboard-view-all primary-focus">
+        View All <span aria-hidden="true">›</span>
+      </a>
+    </header>
+
+    <ul class="project-list">
+      {
+        projects.map((project) => (
+          <li class="project-row">
+            <a
+              href={`/projects/${project.id}/`}
+              class="project-art primary-focus"
+              aria-label={`View ${project.data.title}`}
+            >
+              <img
+                src={project.data.thumbnail.src}
+                width={project.data.thumbnail.width}
+                height={project.data.thumbnail.height}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+
+            <div class="project-copy">
+              <a href={`/projects/${project.id}/`} class="content-link primary-focus">
+                {project.data.title}
+              </a>
+              <p>{project.data.description}</p>
+              <p class="tech-line">{project.data.tech.join(" · ")}</p>
+            </div>
+
+            <span
+              class:list={["project-status", project.data.homeStatus === "WEB" && "status-web"]}
+            >
+              {project.data.homeStatus ?? "LIVE"}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </PixelPanel>
+
+  <PixelPanel as="article" aria-labelledby="experience-heading" class="dashboard-panel">
+    <header class="dashboard-heading">
+      <h3 id="experience-heading"><span aria-hidden="true">&gt;_</span> Experience</h3>
+      <a href={experience.href} class="dashboard-view-all primary-focus">
+        View All <span aria-hidden="true">›</span>
+      </a>
+    </header>
+
+    <div class="experience-body">
+      <div class="experience-lead">
+        <div class="d2l-logo-wrap">
+          <img
+            src={d2lLogo.src}
+            width={d2lLogo.width}
+            height={d2lLogo.height}
+            alt={`${experience.organization} logo`}
+            loading="lazy"
+            decoding="async"
+            class="d2l-logo"
+          />
+        </div>
+        <div>
+          <h4>{experience.role}</h4>
+          <p class="experience-organization">{experience.organization}</p>
+          <p>{experience.period}</p>
+        </div>
+      </div>
+
+      <p class="experience-summary">{experience.summary}</p>
+
+      <ul class="experience-highlights">
+        {experience.highlights.map((highlight) => <li>{highlight}</li>)}
+      </ul>
+    </div>
+  </PixelPanel>
+
+  <PixelPanel as="article" aria-labelledby="recent-notes-heading" class="dashboard-panel">
+    <header class="dashboard-heading">
+      <h3 id="recent-notes-heading"><span aria-hidden="true">&gt;_</span> Recent Notes</h3>
+      <a href="/blog/" class="dashboard-view-all primary-focus">
+        View All <span aria-hidden="true">›</span>
+      </a>
+    </header>
+
+    <ul class="note-list">
+      {
+        notes.map((note) => (
+          <li class="note-row">
+            <a
+              href={`/blog/${note.id}/`}
+              class="note-art primary-focus"
+              aria-label={`Read ${note.data.title}`}
+            >
+              <img
+                src={note.data.heroImage.src}
+                width={note.data.heroImage.width}
+                height={note.data.heroImage.height}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+
+            <div class="note-copy">
+              <div class="note-title-row">
+                <a href={`/blog/${note.id}/`} class="content-link primary-focus">
+                  {note.data.title}
+                </a>
+                <time datetime={note.data.pubDate.toISOString()}>
+                  {dateFormatter.format(note.data.pubDate)}
+                </time>
+              </div>
+              <p>{note.data.description}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a href="/blog/" class="notes-archive primary-focus">
+      <Icon name="message-circle" size="sm" />
+      <span>More notes in the archive</span>
+      <span aria-hidden="true">→</span>
+    </a>
+  </PixelPanel>
+</section>
+
+<style>
+  .dashboard-grid {
+    display: grid;
+    min-width: 0;
+    gap: 1.25rem;
+  }
+
+  .dashboard-panel {
+    display: flex;
+    min-width: 0;
+    height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+    clip-path: polygon(
+      0.45rem 0,
+      calc(100% - 0.45rem) 0,
+      100% 0.45rem,
+      100% calc(100% - 0.45rem),
+      calc(100% - 0.45rem) 100%,
+      0.45rem 100%,
+      0 calc(100% - 0.45rem),
+      0 0.45rem
+    );
+  }
+
+  .dashboard-heading {
+    display: flex;
+    min-height: 3.1rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-bottom: 2px solid var(--border);
+    padding: 0.8rem 0.95rem;
+  }
+
+  .dashboard-heading h3,
+  .dashboard-view-all,
+  .project-status {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .dashboard-heading h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--foreground);
+    font-size: 0.68rem;
+    line-height: 1.55;
+  }
+
+  .dashboard-view-all {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--foreground);
+    font-size: 0.48rem;
+    line-height: 1.6;
+    text-decoration: none;
+  }
+
+  .dashboard-view-all:hover {
+    color: var(--info);
+  }
+
+  .project-list,
+  .note-list {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .project-row {
+    display: grid;
+    grid-template-columns: 4.25rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 7rem;
+    border-bottom: 1px solid var(--color-base-300);
+    padding: 0.65rem 0.75rem;
+  }
+
+  .project-row:last-child,
+  .note-row:last-child {
+    border-bottom: 0;
+  }
+
+  .project-art {
+    display: grid;
+    align-self: stretch;
+    place-items: center;
+    border-right: 1px solid var(--color-base-300);
+    padding-right: 0.65rem;
+  }
+
+  .project-art img,
+  .note-art img,
+  .d2l-logo {
+    image-rendering: pixelated;
+  }
+
+  .project-art img {
+    width: 3.35rem;
+    height: 3.35rem;
+    object-fit: contain;
+  }
+
+  .project-copy,
+  .note-copy,
+  .experience-body {
+    min-width: 0;
+    font-family: var(--font-mono);
+  }
+
+  .content-link {
+    color: var(--foreground);
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .content-link:hover {
+    color: var(--info);
+  }
+
+  .project-copy p,
+  .note-copy > p {
+    margin-top: 0.25rem;
+    color: var(--muted-foreground);
+    font-size: 0.66rem;
+    line-height: 1.5;
+  }
+
+  .project-copy .tech-line {
+    color: var(--color-primary-700);
+    font-size: 0.61rem;
+  }
+
+  :global(.dark) .project-copy .tech-line {
+    color: var(--color-primary-300);
+  }
+
+  .project-status {
+    align-self: start;
+    margin-top: 0.2rem;
+    border: 1px solid var(--color-success-700);
+    padding: 0.32rem 0.4rem;
+    color: var(--color-success-700);
+    font-size: 0.45rem;
+    line-height: 1;
+  }
+
+  .project-status.status-web {
+    border-color: var(--info);
+    color: var(--info);
+  }
+
+  :global(.dark) .project-status {
+    border-color: var(--color-success-300);
+    color: var(--color-success-300);
+  }
+
+  .experience-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .experience-lead {
+    display: grid;
+    grid-template-columns: 5.4rem minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .d2l-logo-wrap {
+    display: grid;
+    min-height: 4.2rem;
+    place-items: center;
+    border-right: 1px solid var(--color-base-300);
+    padding-right: 0.75rem;
+  }
+
+  .d2l-logo {
+    width: 4.4rem;
+    height: 4.4rem;
+    object-fit: contain;
+  }
+
+  :global(.dark) .d2l-logo {
+    background: var(--color-base-100);
+  }
+
+  .experience-lead h4 {
+    color: var(--foreground);
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .experience-lead p {
+    color: var(--foreground);
+    font-size: 0.76rem;
+    line-height: 1.45;
+  }
+
+  .experience-organization {
+    font-weight: 700;
+  }
+
+  .experience-summary {
+    color: var(--foreground);
+    font-size: 0.75rem;
+    line-height: 1.55;
+  }
+
+  .experience-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    border-top: 1px dashed var(--color-base-400);
+    padding-top: 0.8rem;
+  }
+
+  .experience-highlights li {
+    position: relative;
+    padding-left: 0.9rem;
+    color: var(--muted-foreground);
+    font-size: 0.65rem;
+    line-height: 1.45;
+  }
+
+  .experience-highlights li::before {
+    position: absolute;
+    top: 0.45rem;
+    left: 0;
+    width: 0.3rem;
+    height: 0.3rem;
+    background: var(--color-success-600);
+    content: "";
+  }
+
+  .note-row {
+    display: grid;
+    grid-template-columns: 3.75rem minmax(0, 1fr);
+    gap: 0.8rem;
+    border-bottom: 1px dashed var(--color-base-400);
+    padding: 1rem 0.85rem;
+  }
+
+  .note-art {
+    display: grid;
+    align-self: start;
+    place-items: center;
+  }
+
+  .note-art img {
+    width: 3.1rem;
+    height: 3.1rem;
+    object-fit: contain;
+  }
+
+  .note-row:nth-child(2) .note-art img {
+    transform: scale(1.1);
+  }
+
+  .note-title-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 0.6rem;
+  }
+
+  .note-title-row time {
+    color: var(--color-secondary-600);
+    font-family: var(--font-display);
+    font-size: 0.43rem;
+    line-height: 1.7;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  :global(.dark) .note-title-row time {
+    color: var(--color-secondary-300);
+  }
+
+  .notes-archive {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: auto 0.85rem 0.85rem;
+    border: 1px solid var(--color-base-400);
+    padding: 0.65rem 0.75rem;
+    color: var(--color-primary-700);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .notes-archive span:last-child {
+    margin-left: auto;
+  }
+
+  .notes-archive:hover {
+    border-color: var(--info);
+    color: var(--info);
+  }
+
+  :global(.dark) .notes-archive {
+    color: var(--color-primary-300);
+  }
+
+  @media (max-width: 420px) {
+    .project-row {
+      grid-template-columns: 3.5rem minmax(0, 1fr);
+    }
+
+    .project-art {
+      grid-row: span 2;
+    }
+
+    .project-status {
+      grid-column: 2;
+      justify-self: start;
+      margin-top: 0;
+    }
+
+    .note-title-row {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .dashboard-grid {
+      grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr) minmax(0, 1.06fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+  }
+</style>

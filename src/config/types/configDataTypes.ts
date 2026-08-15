@@ -94,6 +94,14 @@ export interface PortfolioDataProps {
     uptime: string;
     resumeHref: string;
   };
+  experience: {
+    organization: string;
+    role: string;
+    period: string;
+    summary: string;
+    highlights: readonly string[];
+    href: string;
+  };
   home: { tagline: string; heading: string; intro: string }; // home hero
   contact: { prompt: string }; // home Contact-section prompt
 }

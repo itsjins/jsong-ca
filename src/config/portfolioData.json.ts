@@ -46,6 +46,23 @@ const portfolioData = {
     resumeHref: "",
   },
 
+  experience: {
+    organization: "D2L",
+    role: "Software Developer",
+    period: "2022 – Present",
+    summary:
+      "Building and operating cloud infrastructure and internal platforms that support scalable, reliable, and secure developer experiences.",
+    highlights: [
+      "Infrastructure as Code with Terraform",
+      "CI/CD automation and platform tooling",
+      "Kubernetes, Docker, and cloud services",
+      "Observability, monitoring, and reliability",
+      "Collaboration with product and dev teams",
+    ],
+    // Temporary destination until the dedicated Experience route is added.
+    href: "/about/",
+  },
+
   home: {
     tagline: "Player 1",
     heading: "Welcome, Player One",

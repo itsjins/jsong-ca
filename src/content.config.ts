@@ -52,6 +52,9 @@ const projectsCollection = defineCollection({
       description: z.string(), // listing card excerpt + SEO meta description
       tagline: z.string(), // detail hero intro line
       status: z.enum(["complete", "in-progress"]),
+      // Optional homepage-dashboard presentation. Canonical project status remains `status`.
+      homeStatus: z.enum(["LIVE", "WEB"]).optional(),
+      homepageOrder: z.number().optional(),
       moduleId: z.string(), // shown on the detail hero, e.g. "#01_CHAT"
       order: z.number(), // listing sort key (ascending)
       thumbnail: image(),
