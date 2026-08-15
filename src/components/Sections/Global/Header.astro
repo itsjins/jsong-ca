@@ -7,15 +7,16 @@
 //
 // Reuses existing pieces — ui/nav, ui/sheet (opened/closed via its `_dialog` data hooks), the pink
 // `.pixel-btn` (global.css), and ui/theme-toggle. No new primitives. The MENU / CLOSE controls are
-// worded (no icons). Content is wired from config: brand = siteData.name, links = navData.
+// worded (no icons). Identity is wired from portfolioData; links come from navData.
 import HeaderNavLinks from "@components/Sections/Global/HeaderNavLinks.astro";
 import { Nav } from "@components/ui/nav";
 import { Sheet } from "@components/ui/sheet";
 import { ThemeToggle } from "@components/ui/theme-toggle";
-import siteData from "@config/siteData.json";
-import heroAvatar from "@images/hero-avatar.jpg";
+import portfolioData from "@config/portfolioData.json";
+import headerAvatar from "@images/jsong-about-avatar.png";
 
 const pathname = Astro.url.pathname;
+const profileName = portfolioData.homeProfile.name;
 ---
 
 <header
@@ -29,30 +30,29 @@ const pathname = Astro.url.pathname;
     <a
       href="/"
       class="primary-focus flex min-w-0 items-center gap-3 sm:gap-4"
-      aria-label={`${siteData.name} — home`}
+      aria-label={`${profileName} — home`}
     >
       <span
-        class="bg-accent border-border flex size-9 shrink-0 items-center justify-center overflow-clip border-2 p-1 sm:size-10"
+        class="bg-accent border-border flex size-9 shrink-0 items-center justify-center overflow-clip border-2 sm:size-10"
       >
         {
-          /* ponytail: plain <img> on the Vite-fingerprinted import, not astro:assets <Image>, so the
-            build needs no Sharp (the template has no Sharp dep; see the README's image note).
-            Fine for a 1KB brand mark; switch to <Image> if the project adds Sharp for real content. */
+          /* Plain <img> on the Vite-fingerprinted import keeps this zero-JS. The source is a full
+            transparent character scene, so the oversized crop keeps the face readable at 40px. */
         }
         <img
-          src={heroAvatar.src}
-          width={heroAvatar.width}
-          height={heroAvatar.height}
+          src={headerAvatar.src}
+          width={headerAvatar.width}
+          height={headerAvatar.height}
           alt=""
           loading="eager"
           decoding="async"
-          class="size-full object-cover object-center"
+          class="brand-avatar"
         />
       </span>
       <span
         class="font-display text-info xs:text-lg truncate text-base tracking-[-0.06em] uppercase sm:text-2xl"
       >
-        {siteData.name}
+        {profileName}<span class="hidden sm:inline" aria-hidden="true">{" // "}Dev Log</span>
       </span>
     </a>
 
@@ -104,3 +104,15 @@ const pathname = Astro.url.pathname;
     </Nav>
   </Sheet>
 </header>
+
+<style>
+  .brand-avatar {
+    width: 210%;
+    height: 210%;
+    max-width: none;
+    flex: none;
+    object-fit: contain;
+    transform: translateY(19%);
+    image-rendering: pixelated;
+  }
+</style>
